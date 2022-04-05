@@ -4,7 +4,7 @@ const router = express.Router();
 const UserModel = require('../models/userModel.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
+const {protect} = require('../middleware/authMiddleware')
 router.post('/', async (req, res) => {
     const { name, email, password } = req.body
 
@@ -64,7 +64,11 @@ router.post('/login', async (req, res) => {
     }
 })
 
-  
+router.get('/me', protect, async (req, res) => {
+  const { email, name, _id } = await UserModel.findById(req.user.id)
+
+  res.json({id: _id, name, email})
+})
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
       expiresIn: '24h',
