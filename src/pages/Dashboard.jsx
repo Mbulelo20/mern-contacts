@@ -12,6 +12,7 @@ import Aos from 'aos';
 const Dashboard = () => {
     const [contacts, setContacts] = useState([])
     const [user, setUser] = useState('')
+    const [contactID, setContactID] = useState('')
     const [showModal, setShowModal] = useState(false)
     const navigate = useNavigate();
     useEffect(() => {
@@ -43,30 +44,42 @@ const Dashboard = () => {
             setShowModal(true)
         } else {
             setShowModal(false)
+            setContactID('')
         }
+    }
+
+    const deleteContact = (contact) => {
+        console.log(contact._id)
+        axios.delete(`http://localhost:8000/api/contacts/${contact._id}`, {
+            headers: {
+                Authorization: `Bearer ${user.token}`
+            }
+        })
+        .then((res) => {console.log(res)})
+        .catch((err) => {console.log(err)})
     }
     return (
         <>
-            <div style={{margin: 'auto', width:'50%', marginBottom:'2em'}}>
+            <div style={{margin: 'auto',  marginBottom:'2em'}}>
                 <span>
-                    <button className='btn btn-danger btn-sm' onClick={() => setModal()}>
+                    <button className='btn btn-danger' onClick={() => setModal()}>
                         {showModal ? 'Back' : 'Add'}
                     </button>
                     </span>
                 <span>
                 <button
-                    className='btn btn-dark btn-sm'
+                    className='btn btn-dark'
                     onClick={() => {}}
                     >
                     Search
                     </button>
                 </span>
             </div>
-            {showModal === true && <div data-aos='fade-down'><ContactFormModal setShowModal={setShowModal}/></div>}
-            
+            {showModal === true && <div data-aos='fade-down'><ContactFormModal contactID={contactID} setShowModal={setShowModal}/></div>}
+            {contacts.length < 1 && <h1>No contacts found</h1> }
             <div style={userStyle}>
                 {contacts.map((contact) => (
-                    <div className='card bg-light' style={{ height:'150px'}}>
+                    <div className='card bg-light' style={{ height:'150px'}} key={contact._id}>
                         <h3 className="text-primary text-left" style={{color:'#A92244'}}>{contact.name}
                         <span className="badge badge-primary " style={{float: 'right'}}>{contact.type}</span>
                         </h3>
@@ -81,11 +94,14 @@ const Dashboard = () => {
                         <p style={{marginTop:'-1em'}}>
                             <button
                             className='btn btn-dark btn-sm'
-                            onClick={() => {}}
+                            onClick={() => {
+                                setContactID(contact._id)
+                                setShowModal(true)
+                            }}
                             >
                             Edit
                             </button>
-                            <button className='btn btn-danger btn-sm' onClick={() => {}}>
+                            <button className='btn btn-danger btn-sm' onClick={() => {deleteContact(contact)}}>
                             Delete
                             </button>
                         </p>
@@ -96,8 +112,16 @@ const Dashboard = () => {
     )
 }
 
+// axios.delete(`http://localhost:8000/api/contacts/${contactID}`, {
+//                                     headers: {
+//                                         Authorization: `Bearer ${user.token}`
+//                                     }
+//                                 })
+//                                 .then((res) => {console.log(res)})
+//                                 .catch((err) => {console.log(err)})
+//                                 }
+
 const userStyle = {
-    width:'50%',
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',
     gridColumnGap: '1em',

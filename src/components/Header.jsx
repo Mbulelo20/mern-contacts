@@ -17,24 +17,24 @@ const Header = () => {
     <Fragment>
         <header className="header">
             <div className="logo">
-            {user ? (<h4><FaUser className="userIcon"/> {user.name}</h4>) : (<h5><FaUser className="userIcon"/>You are not logged in</h5>)}
+            {user ? (<h1 style={{marginBottom: '-.5em'}}><FaUser className="userIcon"/> {user.name.charAt(0).toUpperCase() + user.name.slice(1)}</h1>) : (<h2><FaUser className="userIcon"/>You are not logged in</h2>)}
             </div>
             <ul>
                 {user ? (
                     <li>
-                    <button className="btn"onClick={onLogout}>
+                    <button className="btn btn-danger"onClick={onLogout}>
                         <FaSignOutAlt /> Logout
                     </button>
                 </li>
                 ) : (
                     <Fragment>
                         <li>
-                    <Link to="/login"> 
+                    <Link to="/login" className="btn btn-danger btn-sm"> 
                         <FaSignInAlt /> Login
                     </Link>
                 </li>
                 <li>
-                    <Link to="/register">
+                    <Link to="/register" className="btn btn-dark btn-sm">
                         <FaUser className="userIcon"/> Register
                     </Link>
                 </li>

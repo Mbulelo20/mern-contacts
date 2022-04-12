@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
 
-const ContactForm = ({setShowModal}) => {
+const ContactForm = ({setShowModal, contactID}) => {
     const [user, setUser] = useState('');
     const [contactData, setContactData] = useState({
         name: '',
@@ -20,6 +20,24 @@ const ContactForm = ({setShowModal}) => {
         if(user === null) {
             navigate('/login')
         }
+
+        if(contactID) {
+            // const user = JSON.parse(localStorage.getItem('user'))
+            axios.get(`http://localhost:8000/api/contacts/${contactID}`, {
+            headers: {
+                Authorization: `Bearer ${user.token}`
+            }
+        })
+            .then(res => {setContactData({...contactData,
+                name: res.data.name,
+                email: res.data.email,
+                phone: res.data.phone,
+                type: res.data.type
+                
+            })})
+            
+            .catch(err => {console.log(err)})
+        }
     }, [])
     const onChange = (e) => {
         setContactData((prevState) => ({
@@ -34,8 +52,17 @@ const ContactForm = ({setShowModal}) => {
         const contactData = {
             name, email, phone, type
         }
-
-        axios.post('http://localhost:8000/api/contacts', contactData, {
+        
+        if(contactID) {
+            axios.put(`http://localhost:8000/api/contacts/update/${contactID}`, contactData, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                }
+            })
+            .then((response) => { setShowModal(false)})
+            .catch((error) => { console.log("error", error)})
+        } else {
+            axios.post('http://localhost:8000/api/contacts', contactData, {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
@@ -43,7 +70,11 @@ const ContactForm = ({setShowModal}) => {
         .then((response) => { console.log(response.data)})
         .then(() => setShowModal(false))
         .catch((err) => { console.log("error:", err)})
+        }
+
+        
     }
+    
   return (
     <div style={{width:'100%'}}>
         <form style={{marginTop: '0em'}} onSubmit={onSubmit}>

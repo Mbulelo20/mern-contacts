@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import {useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import axios from 'axios'
 const Register = () => {
     const navigate = useNavigate();
@@ -86,11 +87,10 @@ const Register = () => {
                             placeholder='Confirm password'
                             onChange={onChange}
                         />
-                        <p>By creating an account you agree to our <a href="/">Terms & Privacy</a>.</p>
                         <button type="submit" className="registerbtn">Register</button>
                     </div>
                     <div className="container signin">
-                        <p>Already have an account? <a href=".">Sign in</a>.</p>
+                        <p>Already have an account? <Link to='/login'>Sign in</Link>.</p>
                     </div>
                 </form>
             </div>

@@ -12,7 +12,7 @@ function App() {
   return (
     <Fragment>
       <Router>
-        <div className="container">
+        <div className="container" style={{width: '70%', margin:'auto'}}>
           <Header />
           <Routes>
             <Route path='/' element={<Dashboard />}/>

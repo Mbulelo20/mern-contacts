@@ -44,7 +44,7 @@ const Login = () => {
             </p>
         </section>
         <section className="formSection">
-            <div className="card">
+            <div className="card" style={{width: '70%', margin:'auto'}}>
                 <form onSubmit={onSubmit}>
                     <div className="container">
                         <input 
