@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
 
-const ContactForm = ({setShowModal, contactID}) => {
+const ContactForm = ({setShowModal, setContactID, contactID}) => {
     const [user, setUser] = useState('');
     const [contactData, setContactData] = useState({
         name: '',
@@ -38,7 +38,7 @@ const ContactForm = ({setShowModal, contactID}) => {
             
             .catch(err => {console.log(err)})
         }
-    }, [])
+    }, [contactID, navigate])
     const onChange = (e) => {
         setContactData((prevState) => ({
           ...prevState,
@@ -59,7 +59,12 @@ const ContactForm = ({setShowModal, contactID}) => {
                     Authorization: `Bearer ${user.token}`
                 }
             })
-            .then((response) => { setShowModal(false)})
+            .then((response) => { 
+                setContactID('')
+                setShowModal(false)
+
+
+            })
             .catch((error) => { console.log("error", error)})
         } else {
             axios.post('http://localhost:8000/api/contacts', contactData, {

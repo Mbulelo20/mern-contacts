@@ -7,9 +7,10 @@ const ContactSchema = mongoose.Schema({
         ref: 'UserModel'
     },
     name: {
-        type: String,
+        type: [],
         required: true
     },
+    
     phone: {
         type: String,
     },
