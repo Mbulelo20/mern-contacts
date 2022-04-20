@@ -1,7 +1,9 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
+import { toast } from 'react-toastify';
+
 const Register = () => {
     const navigate = useNavigate();
 
@@ -20,25 +22,25 @@ const Register = () => {
     }
     const onSubmit = (e) => {
         e.preventDefault();
-        const formData = {
-            name,
-            email,
-            password,
-          }
-        setFormData(formData)
-
-        axios.post('http://localhost:8000/api/users', formData)
-        .then((response) => { 
-            localStorage.setItem('user', JSON.stringify(response.data))
-        })
-        .then(() => {navigate('/')})
-        .catch((err) => { console.log(err)})
-        setFormData({
-            name: '', 
-            email: '',
-            password: '',
-            password2: ''
-        })
+        if (email === '' || password === '' || name === '') {
+            toast.error('Please fill in all fields');
+          } 
+        if(password!== password2) {
+            toast.error('Passwords do not match', 'danger');
+        } else {
+            const formData = {
+                name,
+                email,
+                password,
+            }
+            setFormData(formData)
+            axios.post('http://localhost:8000/api/users', formData)
+            .then((response) => { 
+                localStorage.setItem('user', JSON.stringify(response.data));
+                navigate('/')
+            })
+            .catch( () => { toast.error('Email already in use')})
+        }
     }
   return (
     <Fragment>

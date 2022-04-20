@@ -107,8 +107,7 @@ const Dashboard = () => {
                     >
                     Search
                     </button>
-                </span>
-                {showSearch && 
+                    {showSearch && 
                     <span>
                     <input 
                         data-aos='slide-right'
@@ -119,10 +118,12 @@ const Dashboard = () => {
                         value={searchInput || ''}
                         placeholder='Enter name'
                         onChange={onChange}
-                        style={{width:'20%'}}
+                        style={{width:'20%', marginBottom:'-1em', height:'30.78px'}}
                     />
                 </span>
                 }
+                </span>
+                
                 
             </div>
             {showModal === true && <div data-aos='slide-down'><ContactFormModal setContactID={setContactID} contactID={contactID} setShowModal={setShowModal}/></div>}
